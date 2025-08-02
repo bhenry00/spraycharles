@@ -8,9 +8,8 @@ from spraycharles.lib.logger import logger, JSON_FMT
 class Okta:
     NAME = "Okta"
     DESCRIPTION = "Spray Okta API"
-
-
-    def __init__(self, host, port, timeout, fireprox):
+    # Stop and stop_num are dead args, only used to keep consistency with SMB target
+    def __init__(self, host, port, timeout, fireprox, stop, stop_num):
         self.timeout = timeout
         self.url = f"https://{host}:{port}/api/v1/authn"
 

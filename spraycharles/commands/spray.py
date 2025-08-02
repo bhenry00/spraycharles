@@ -38,6 +38,8 @@ def main(
     notify:     HookSvc = typer.Option(None, '-n', '--notify', case_sensitive=False, help="Enable notifications for Slack, Teams or Discord", rich_help_panel="Notifications"),
     webhook:    str     = typer.Option(None, '-w', '--webhook', help="Webhook used for specified notification module", rich_help_panel="Notifications"),
     pause:      bool    = typer.Option(False, '--pause', help="Pause the spray between intervals if a new potentially successful login was found", rich_help_panel="Spray Behavior"),
+    stop:       bool    = typer.Option(False, '--stop', '-s' , help="Stop the spray when a given number of accounts are locked out (SMB only)", rich_help_panel="Spray Behavior"),
+    stop_num:   int     = typer.Option(1, '-sn', '--stop_num', help="How many accounts can be locked out before the spray stops (SMB only)", rich_help_panel="Spray Behavior"),
     no_ssl:     bool    = typer.Option(False, '--no-ssl', help="Use HTTP instead of HTTPS", rich_help_panel="Spray Target"),
     debug:      bool    = typer.Option(False, '--debug', help="Enable debug logging (overrides --quiet)")):
 
@@ -179,7 +181,9 @@ def main(
         pause=pause,
         no_ssl=no_ssl,
         debug=debug,
-        quiet=quiet
+        quiet=quiet,
+        stop=stop,
+        stop_num=stop_num,
     )
 
     spraycharles.initialize_module()

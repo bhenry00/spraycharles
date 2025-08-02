@@ -19,11 +19,10 @@ from spraycharles.lib.logger import console, logger
 from spraycharles.lib.analyze import Analyzer
 from spraycharles.targets import all as all_modules
 
-
 class Spraycharles:
     def __init__( self, user_list, user_file, password_list, password_file, host, module,
                  path, output, attempts, interval, equal, timeout, port, fireprox, domain,
-                 analyze, jitter, jitter_min, notify, webhook, pause, no_ssl, debug, quiet):
+                 analyze, jitter, jitter_min, notify, webhook, pause, no_ssl, debug, quiet, stop, stop_num):
 
         self.passwords = password_list
         self.password_file = None if password_file is None else Path(password_file)
@@ -55,6 +54,8 @@ class Spraycharles:
         self.login_attempts = 0
         self.target = None
         self.log_name = None
+        self.stop = stop
+        self.stop_num = stop_num
 
         # 
         # Create spraycharles directories if they don't exist
@@ -105,7 +106,7 @@ class Spraycharles:
         for target in all_modules:
             if self.module == target.NAME:
                 logger.debug(f"Using {target.NAME} module")
-                self.target = target(self.host, self.port, self.timeout, self.fireprox)
+                self.target = target(self.host, self.port, self.timeout, self.fireprox, self.stop, self.stop_num)
                  
                 #
                 # NTLM module requires path to be set
@@ -147,6 +148,10 @@ class Spraycharles:
 
         if self.notify:
             spray_info.add_row("Notify", f"True ({self.notify.value})")
+
+        if self.stop:
+            spray_info.add_row("Stop", f"{self.stop}")
+            spray_info.add_row("Stop Threshold", f"{self.stop_num}")
 
         log_name = pathlib.PurePath(self.log_name)
         out_name = pathlib.PurePath(self.output)

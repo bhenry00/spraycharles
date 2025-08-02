@@ -7,8 +7,8 @@ from .classes.BaseHttpTarget import BaseHttpTarget
 class NTLM(BaseHttpTarget):
     NAME = "NTLM"
     DESCRIPTION = "Spray NTLM over HTTP endpoints"
-
-    def __init__(self, host, port, timeout, fireprox):
+    # Stop and stop_num are dead args, only used to keep consistency with SMB target
+    def __init__(self, host, port, timeout, fireprox, stop, stop_num):
         self.timeout = timeout
 
         #

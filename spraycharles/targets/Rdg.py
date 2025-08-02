@@ -6,8 +6,8 @@ from .classes.BaseHttpTarget import BaseHttpTarget
 class RDG(BaseHttpTarget):
     NAME = "RDG"
     DESCRIPTION = "Spray Microsoft Remote Desktop Gateway"
-
-    def __init__(self, host, port, timeout, fireprox):
+    # Stop and stop_num are dead args, only used to keep consistency with SMB target
+    def __init__(self, host, port, timeout, fireprox, stop, stop_num):
         self.timeout = timeout
         self.url = f"https://{host}:{port}/RDWeb/Pages/en-US/login.aspx"
 

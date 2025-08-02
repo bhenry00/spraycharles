@@ -6,8 +6,8 @@ from .classes.BaseHttpTarget import BaseHttpTarget
 class Sonicwall(BaseHttpTarget):
     NAME = "Sonicwall"
     DESCRIPTION = "Spray Sonicwall VPN appliances"
-
-    def __init__(self, host, port, timeout, fireprox):
+    # Stop and stop_num are dead args, only used to keep consistency with SMB target
+    def __init__(self, host, port, timeout, fireprox, stop, stop_num):
         self.domain = input("Enter domain: ")
         self.timeout = timeout
         self.url = f"https://{host}:{port}/auth.cgi"

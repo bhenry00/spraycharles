@@ -6,8 +6,8 @@ from .classes.BaseHttpTarget import BaseHttpTarget
 class CiscoSSLVPN(BaseHttpTarget):
     NAME = "CiscoSSLVPN"
     DESCRIPTION = "Spray Cisco SSL VPN (Cisco ASA)"
-
-    def __init__(self, host, port, timeout, fireprox):
+    # Stop and stop_num are dead args, only used to keep consistency with SMB target
+    def __init__(self, host, port, timeout, fireprox, stop, stop_num):
         self.group = input("Enter VPN group: ")
         self.timeout = timeout
         self.url = f"https://{host}:{port}/+webvpn+/index.html"

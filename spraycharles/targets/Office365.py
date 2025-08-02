@@ -9,8 +9,8 @@ from spraycharles.lib.logger import logger, JSON_FMT
 class Office365:
     NAME = "Office365"
     DESCRIPTION = "Spray Microsoft Office 365"
-
-    def __init__(self, host, port, timeout, fireprox):
+    # Stop and stop_num are dead args, only used to keep consistency with SMB target
+    def __init__(self, host, port, timeout, fireprox, stop, stop_num):
 
         self.timeout = timeout
         self.url = "https://login.microsoft.com/common/oauth2/token"

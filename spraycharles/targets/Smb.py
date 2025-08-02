@@ -1,11 +1,11 @@
 import json
 import datetime
+import sys
 from impacket.smb import SMB_DIALECT
 from impacket.smbconnection import SessionError, SMBConnection
 
 from spraycharles.lib.logger import logger, JSON_FMT
 from spraycharles.lib.utils import SMBStatus, SprayResult
-
 
 class SMB:
     NAME = "SMB"
@@ -15,7 +15,7 @@ class SMB:
     # Port, timeout and fireprox are dead args here. exist only to keep
     # formatting and logic from main spraycharles.py consistent with HTTP modules
     #
-    def __init__(self, host, port, timeout, fireprox):
+    def __init__(self, host, port, timeout, fireprox, stop, stop_num):
         self.host = host
         self.url = f"smb://{host}"
         self.conn = ""
@@ -25,6 +25,9 @@ class SMB:
         self.smbv1 = True
         self.username = ""
         self.password = ""
+        self.locked_accounts = 0
+        self.stop = stop
+        self.stop_num = stop_num
 
 
     def get_conn(self):
@@ -61,6 +64,10 @@ class SMB:
         self.os = self.conn.getServerOS()
         return True
 
+    def check_stop(self):
+        if self.stop and self.locked_accounts == self.stop_num:
+            logger.warning(f"Account lockout threshold ({self.stop_num}) reached. Shutting down...\n")
+            sys.exit(0)
 
     def login(self, username, password):
         self.username = username
@@ -96,6 +103,7 @@ class SMB:
                 return SMBStatus.STATUS_LOGON_FAILURE.name
             
             elif SMBStatus.STATUS_ACCOUNT_LOCKED_OUT in str(e):
+                self.locked_accounts += 1
                 return SMBStatus.STATUS_ACCOUNT_LOCKED_OUT.name
             
             elif SMBStatus.STATUS_ACCOUNT_DISABLED in str(e):
@@ -126,6 +134,8 @@ class SMB:
     def print_response(self, response, outfile, timeout=False, print_to_screen=True):
         if print_to_screen:
             print("%-25s %-25s %-23s" % (self.username, self.password, response))
+        if "LOCKED" in response:
+            self.check_stop()
         self.log_attempt(response, outfile)    
 
     

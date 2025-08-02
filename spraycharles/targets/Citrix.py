@@ -10,8 +10,8 @@ from .classes.BaseHttpTarget import BaseHttpTarget
 class Citrix(BaseHttpTarget):
     NAME = "Citrix"
     DESCRIPTION = "Spray Citrix NetScaler"
-
-    def __init__(self, host, port, timeout, fireprox):
+    # Stop and stop_num are dead args, only used to keep consistency with SMB target
+    def __init__(self, host, port, timeout, fireprox, stop, stop_num):
         self.timeout = timeout
         self.host = host
         self.url = f"https://{host}:{port}/cgi/login"
